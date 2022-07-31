@@ -1,0 +1,101 @@
+mod Test do
+    import (encode, decode) from XML
+    import (encode, decode) from JSON
+
+    fn main() do
+        // Type
+        integer = 1
+        float = 1.1
+        boolean = true
+        string = "Hello world"
+        array = [1, 1.1, "Hello world"]
+        object = {"a": 1, "b": 1.1, "c": "Hello world"} // Work with json
+        tuple = ("ok", 1)
+        function = (a, b) => a + b end // First class function
+        binary = <178, 196, 255, 0> // Work with rpc
+
+        // Operator
+        float = integer + float
+        string
+        |> IO.print()
+
+        "John"
+        |> format(12)
+        |> IO.print()
+
+        12
+        |> format("John", _)
+        |> IO.print()
+
+        ("John", "UK")
+        |> three_arguments(_, 12, _)
+        |> IO.print()
+
+        // Functional language
+        [1, 2, 3]
+        |> Enum.map(i => 2 * i end)
+        |> Enum.filter(i => i > 2 end)
+
+        object
+        |> Enum.map((_, j) => j |> IO.print() end)
+
+        // Flow
+        "SGVsbG8gd29ybGQ="
+        |> Base.decode64()
+        |> match do
+            ("ok", v) => v end
+            ("error", e) => e |> IO.print() end
+        end
+
+        cond do
+            1 > 2 => "This is never true" end
+            true => "This is always true" end
+        end
+
+        // Function
+        7
+        |> greater_than_five()
+        |> match do
+            ("ok", v) => v
+            ("error", e) => e
+        end
+        |> IO.print()
+
+        7
+        |> greater_than_six()
+        |> match do
+            ("ok", v) => v
+            ("error", e) => e
+        end
+        |> IO.print()
+
+        // Import
+        "John"
+        |> Hello.print()
+    end
+
+    // Function
+    fn greater_than_five(i) do
+        cond do
+            i > 5 => ("ok", i)
+            _ => ("error", "Lower or equal 5")
+        end
+    end
+
+    fn format(name, age) do
+        "name: ${name}, age: ${age}"
+    end
+
+    fn three_arguments(name, age, country) do
+        "name: ${name}, age: ${age}, country: ${country}"
+    end
+
+    // Guard
+    fn greater_than_six(i) where i > 6 do
+        ("ok", i)
+    end
+
+    fn greater_than_six(i) do
+        ("ok", "Lower or equal 6")
+    end
+end

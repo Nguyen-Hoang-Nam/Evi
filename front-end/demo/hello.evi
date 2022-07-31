@@ -1,0 +1,6 @@
+mod Hello do
+    fn print(name) do
+        "Hello, ${name}"
+        |> IO.print()
+    end
+end
