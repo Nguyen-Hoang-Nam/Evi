@@ -1,0 +1,17 @@
+mod Url do
+    type do
+        {
+            "scheme": String,
+            "user_info": String,
+            "host": String,
+            "port": Int,
+            "path": String,
+            "query": String,
+            "fragment": String
+        }
+    end
+
+    @Function<(String), Url>
+    pub fn parse(url) do
+    end
+end

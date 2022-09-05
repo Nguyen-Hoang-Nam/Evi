@@ -1,0 +1,8 @@
+mod Function do
+    type (A, R) do
+        {
+            "arguments": A,
+            "return": R
+        }
+    end
+end

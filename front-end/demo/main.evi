@@ -1,27 +1,33 @@
 mod Test do
-    import (encode, decode) from XML
-    import (encode, decode) from JSON
+    import (encode, decode) from Xml
+    import * from Base
 
     fn main() do
         // Type
-        integer = 1
-        float = 1.1
-        boolean = true
-        string = "Hello world"
-        array = [1, 1.1, "Hello world"]
-        object = {"a": 1, "b": 1.1, "c": "Hello world"} // Work with json
-        tuple = ("ok", 1)
-        function = (a, b) => a + b end // First class function
-        binary = <178, 196, 255, 0> // Work with rpc
+        tuple = (Ok, 1)
+        null = None
 
-        // Operator
-        float = integer + float
-        string
-        |> IO.print()
+        @Int[3]
+        integer_array = [1, 2, 3] // Best performance, store all in stack
 
+        @Vec
+        integer_vector = [1, 2, 3] // Lower, store all in heap
+        object_vector = [1, 1.1, "Hello world"] // Default type of array is Vector
+
+        value = 1
+        pointer = *value
+
+        value = 2
+        &pointer // 2
+
+
+        // Pipe
         "John"
         |> format(12)
         |> IO.print()
+
+        2
+        |> - 1 // 1
 
         12
         |> format("John", _)
@@ -31,20 +37,12 @@ mod Test do
         |> three_arguments(_, 12, _)
         |> IO.print()
 
-        // Functional language
-        [1, 2, 3]
-        |> Enum.map(i => 2 * i end)
-        |> Enum.filter(i => i > 2 end)
-
-        object
-        |> Enum.map((_, j) => j |> IO.print() end)
-
         // Flow
         "SGVsbG8gd29ybGQ="
         |> Base.decode64()
         |> match do
-            ("ok", v) => v end
-            ("error", e) => e |> IO.print() end
+            (Ok, v) => v end
+            (Error, e) => e |> IO.print() end
         end
 
         cond do
@@ -52,20 +50,37 @@ mod Test do
             true => "This is always true" end
         end
 
+        // Multi
+        multi "plus" do
+            (_) => 1 + 1 |> Ok.success() end
+        end
+        |> multi "check" do
+            ({"plus": 1}) => 1 |> Ok.wrap() end
+            ({"plus": 2}) => None |> Ok.wrap() end
+            (_) => "Number is not 2" |> Error.wrap() end
+        end
+        |> multi "minus" do
+            ({"check": v}) => v |> unwrap_or(2) |> - 1 end
+        end
+        |> match do
+            (Ok, {"plus": v}) => v |> Ok.wrap() end
+            (Error, _, message) => message |> Error.wrap() end
+        end
+
         // Function
         7
         |> greater_than_five()
         |> match do
-            ("ok", v) => v
-            ("error", e) => e
+            (Ok, v) => v
+            (Error, e) => e
         end
         |> IO.print()
 
         7
         |> greater_than_six()
         |> match do
-            ("ok", v) => v
-            ("error", e) => e
+            (Ok, v) => v
+            (Error, e) => e
         end
         |> IO.print()
 
@@ -77,8 +92,8 @@ mod Test do
     // Function
     fn greater_than_five(i) do
         cond do
-            i > 5 => ("ok", i)
-            _ => ("error", "Lower or equal 5")
+            i > 5 => (Ok, i)
+            _ => (Error, "Lower or equal 5")
         end
     end
 
@@ -92,10 +107,10 @@ mod Test do
 
     // Guard
     fn greater_than_six(i) where i > 6 do
-        ("ok", i)
+        (Ok, i)
     end
 
     fn greater_than_six(i) do
-        ("ok", "Lower or equal 6")
+        (Ok, "Lower or equal 6")
     end
 end

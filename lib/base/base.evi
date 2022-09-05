@@ -1,0 +1,30 @@
+mod Base do
+    fn encode64(v: Binary): String do
+        base_64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+        c = Enum.length(v) % 3
+
+        v += <0> |> Enum.repeat(c)
+
+        r = 0..(Enum.length(v) - 1)
+        |> Enum.reduce("",
+            (i, acc) where i % 3 == 0 =>
+                acc += (i / 3 * 4) % 76 == 0
+                |> match do
+                    True => "\r\n" end
+                    False => "" end
+                end
+
+                n = (v[i] << 16) + (v[i + 1] << 8) + v[i + 2]
+                n = [(n >> 18) & 63, (n >> 12) & 63, (n >> 6) & 63, n & 63]
+
+                acc + base_64[n[0]] + base_64[n[1]] + base_64[n[2]] + base_64[n[3]]
+            end
+
+            (_, acc) => acc end
+        )
+
+        r
+        |> String.sub(0, Enum.length(r) - Enum.length(p)) + ("=" |> Enum.repeat(c))
+    end
+end

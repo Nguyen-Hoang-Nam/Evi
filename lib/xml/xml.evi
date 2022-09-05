@@ -1,0 +1,7 @@
+mod Xml do
+    fn encode(v) do
+    end
+
+    fn decode(v) do
+    end
+end

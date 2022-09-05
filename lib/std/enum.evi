@@ -1,0 +1,17 @@
+mod Enum do
+    pub fn map([], _) do
+        []
+    end
+
+    pub fn map([elem | v], f: Funtion) do
+        [elem |> f | map(v, f)]
+    end
+
+    pub fn lenght([]) do
+        0
+    end
+
+    pub fn length([_ | v]): Int do
+        length(v) + 1
+    end
+end

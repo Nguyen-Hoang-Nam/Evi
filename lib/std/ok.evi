@@ -1,0 +1,5 @@
+mod Ok do
+    pub fn wrap(v) do
+        (Ok, v)
+    end
+end

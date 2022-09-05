@@ -1,0 +1,4 @@
+mod IO do
+    pub fn print(v) do
+    end
+end

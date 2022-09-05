@@ -1,0 +1,5 @@
+mod Error do
+    pub fn wrap(v) do
+        (Error, v)
+    end
+end

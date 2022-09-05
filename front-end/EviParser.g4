@@ -12,15 +12,6 @@ mod
     'end' EOF
     ;
 
-statement
-    : assignStatement
-    | expression
-    ;
-
-assignStatement
-    : identifier '=' expression
-    ;
-
 function
     : 'fn' identifier '(' functionParameters? ')' whereClause? 'do'
         (blockExpression)
@@ -31,17 +22,48 @@ blockExpression
     : (statement)*
     ;
 
+statement
+    : assignStatement
+    | expression
+    ;
+
+assignStatement
+    : identifier '=' expression
+    ;
+
 functionParameters
-    : (identifier | literalExpression | '_') ','?
-    | (',' (identifier | literalExpression | '_'))*
+    : functionParameter ','?
+    | (functionParameter ',')? functionParameter (',' functionParameter)*
+    ;
+
+functionParameter
+    : (identifier | literalExpression | '_')
     ;
 
 whereClause
     : 'where' expression
     ;
 
+anonymousFunction
+    : '(' functionParameters? ')' '=>'
+        (blockExpression)
+    'end'
+    ;
+
+matchExpression
+    : 'match' expression 'do'
+        (matchArm '=>' (blockExpression) 'end')*
+    'end'
+    ;
+
+matchArm
+    : '(' expression (',' expression)* ')'
+    ;
+
 expression
-    : literalExpression 
+    : anonymousFunction
+    | literalExpression 
+    | matchExpression
     | identifier
     | expression '.' identifier '(' callParams? ')'
     | expression ('*' | '/' | '%') expression

@@ -1,0 +1,27 @@
+mod Http do
+    import (decode) from Json
+
+    @Function<(String), (Result, Object)>
+    pub fn get(url) do
+        url
+        |> Url.parse()
+        |> match do
+            (Ok, _) =>
+                url
+                |> Tcp.get()
+                |> decode()
+                |> Ok.wrap()
+
+            _ => "Invalid url" |> Error.wrap()
+        end
+    end
+
+    @Function<({"address": String, "handler": Function<String, (Result, Option)>}), (Result, Option)>
+    pub fn server({"address": address, "handler": handler}) do
+    end
+
+    @Function<Any, (Error, None)>
+    pub fn server(_) do
+        None |> Error.wrap()
+    end
+end

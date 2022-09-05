@@ -1,0 +1,33 @@
+mod Kernel do
+    pub fn -(a, b) do
+        a - b
+    end
+
+    pub fn +(a, b) do
+        a + b
+    end
+
+    pub fn *(a, b) do
+        a * b
+    end
+
+    pub fn /(a, b) do
+        a / b
+    end
+
+    pub fn unwrap(v) do
+        v
+        |> match do
+            None => Panic.message("None") end
+            _ => v end
+        end
+    end
+
+    pub fn unwrap_or(v, alternative) do
+        v
+        |> match do
+            None => alternative end
+            _ => v end
+        end
+    end
+end
