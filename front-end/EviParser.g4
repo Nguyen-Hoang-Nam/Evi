@@ -57,13 +57,27 @@ matchExpression
     ;
 
 matchArm
-    : '(' expression (',' expression)* ')'
+    : (expression | '_')
+    ;
+
+pipeMatchExpression
+    : '|>' 'match' 'do'
+        (matchArm '=>' (blockExpression) 'end')*
+    'end'
+    ;
+
+condExpression
+    : 'cond' 'do'
+        (matchArm '=>' (blockExpression) 'end')*
+    'end'
     ;
 
 expression
     : anonymousFunction
     | literalExpression 
     | matchExpression
+    | pipeMatchExpression
+    | condExpression
     | identifier
     | expression '.' identifier '(' callParams? ')'
     | expression ('*' | '/' | '%') expression

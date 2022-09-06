@@ -37,19 +37,6 @@ mod Test do
         |> three_arguments(_, 12, _)
         |> IO.print()
 
-        // Flow
-        "SGVsbG8gd29ybGQ="
-        |> Base.decode64()
-        |> match do
-            (Ok, v) => v end
-            (Error, e) => e |> IO.print() end
-        end
-
-        cond do
-            1 > 2 => "This is never true" end
-            true => "This is always true" end
-        end
-
         // Multi
         multi "plus" do
             (_) => 1 + 1 |> Ok.success() end
@@ -67,50 +54,8 @@ mod Test do
             (Error, _, message) => message |> Error.wrap() end
         end
 
-        // Function
-        7
-        |> greater_than_five()
-        |> match do
-            (Ok, v) => v
-            (Error, e) => e
-        end
-        |> IO.print()
-
-        7
-        |> greater_than_six()
-        |> match do
-            (Ok, v) => v
-            (Error, e) => e
-        end
-        |> IO.print()
-
         // Import
         "John"
         |> Hello.print()
-    end
-
-    // Function
-    fn greater_than_five(i) do
-        cond do
-            i > 5 => (Ok, i)
-            _ => (Error, "Lower or equal 5")
-        end
-    end
-
-    fn format(name, age) do
-        "name: ${name}, age: ${age}"
-    end
-
-    fn three_arguments(name, age, country) do
-        "name: ${name}, age: ${age}, country: ${country}"
-    end
-
-    // Guard
-    fn greater_than_six(i) where i > 6 do
-        (Ok, i)
-    end
-
-    fn greater_than_six(i) do
-        (Ok, "Lower or equal 6")
     end
 end

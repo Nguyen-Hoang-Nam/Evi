@@ -39,10 +39,65 @@ mod Test do
             (Ok, v) => v end
             (Error, e) => e |> IO.print() end
         end
+
+        // Flow
+        "SGVsbG8gd29ybGQ="
+        |> Base.decode64()
+        |> match do
+            (Ok, v) => v end
+            (Error, e) => e |> IO.print() end
+        end
+
+        cond do
+            1 > 2 => "This is never true" end
+            true => "This is always true" end
+        end
+
+        // Function
+        7
+        |> greater_than_five()
+        |> match do
+            (Ok, v) => v end
+            (Error, e) => e end
+        end
+        |> IO.print()
+
+        7
+        |> greater_than_six()
+        |> match do
+            (Ok, v) => v end
+            (Error, e) => e end
+        end
+        |> IO.print()
     end
 
     fn test(_) do
         IO.print("Error")
+    end
+
+    // Function
+    fn greater_than_five(i) do
+        cond do
+            i > 5 => (Ok, i) end
+            _ => (Error, "Lower or equal 5") end
+        end
+    end
+
+    fn format(name, age) do
+        "name: ${name}, age: ${age}"
+    end
+
+    fn three_arguments(name, age, country) do
+        "name: ${name}, age: ${age}, country: ${country}"
+    end
+
+    // Guard
+    fn greater_than_six(i) where i > 6 do
+        (Ok, i)
+    end
+
+    fn greater_than_six(i) do
+        (Ok, "Lower or equal 6")
     end
 
     fn more_arg(arg1, arg2) do

@@ -6,6 +6,7 @@ KW_END: 'end';
 KW_FALSE: 'false';
 KW_FN: 'fn';
 KW_MATCH: 'match';
+KW_COND: 'cond';
 KW_MOD: 'mod';
 KW_TRUE: 'true';
 KW_WHERE: 'where';
